@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, VStack, Heading, Input, Textarea, Button, List, ListItem, ListIcon, Box } from "@chakra-ui/react";
 import { FaCalendarPlus, FaRegCalendarCheck } from "react-icons/fa";
 
 const Index = () => {
-  const [events, setEvents] = useState([]);
+  const [events, setEvents] = useState(() => {
+    const localData = localStorage.getItem("events");
+    return localData ? JSON.parse(localData) : [];
+  });
   const [eventName, setEventName] = useState("");
   const [eventDescription, setEventDescription] = useState("");
 
@@ -15,6 +18,7 @@ const Index = () => {
         id: events.length + 1,
       };
       setEvents([...events, newEvent]);
+      localStorage.setItem("events", JSON.stringify([...events, newEvent]));
       setEventName("");
       setEventDescription("");
     }
